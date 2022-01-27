@@ -1,0 +1,29 @@
+@import "index";
+
+.appbar-text {
+  color: $base-color;
+  font-weight: bolder;
+}
+
+.appbar-background {
+  background: white;
+  position: static;
+}
+
+.appbar-button {
+  color: $dark-grey;
+  padding-inline: 10px;
+}
+
+.appbar-button-text {
+  color: $dark-grey;
+}
+
+.signin-title {
+  font-size: 2.5rem;
+  font-weight: lighter;
+}
+
+.signin-register-text {
+  font-weight: normal;
+}

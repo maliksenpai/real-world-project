@@ -1,0 +1,28 @@
+@import "index";
+
+.profile-background {
+  background-color: lightgrey;
+  width: 100%;
+}
+
+.profile-title {
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+
+.profile-subtitle {
+  font-size: 1rem;
+  font-weight: lighter;
+  color: grey;
+}
+
+.profile-edit-button {
+  color: grey;
+  font-size: 0.75rem;
+  font-weight: lighter;
+  border-color: grey;
+}
+
+.profile-tabs {
+  color: $base-color;
+}

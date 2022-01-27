@@ -1,0 +1,121 @@
+@import "index";
+
+.article-author {
+  color: $base-color;
+  display: block;
+}
+
+.article-light {
+  color: $light-grey;
+  font-weight: lighter;
+  font-size: 0.75rem;
+}
+
+.article-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.article-desc {
+  font-size: 1rem;
+  color: $grey;
+}
+
+.article-favorite-button {
+  color: $base-color;
+  border-color: $base-color;
+  box-shadow: none;
+}
+
+.article-favorite-button :hover {
+  color: $base-color;
+  background-color: white;
+  box-shadow: none;
+}
+
+.article-favorited-button {
+  color: white;
+  background-color: $base-color;
+  box-shadow: none;
+}
+
+.article-favorited-button :hover {
+  background-color: green;
+}
+
+.article-follow-button {
+  color: black;
+  background-color: grey;
+  font-size: 0.75rem;
+  box-shadow: none;
+}
+
+.article-unfollow-button {
+  color: grey;
+  box-shadow: none;
+  font-size: 0.75rem;
+  border-color: grey;
+}
+
+.article-divider {
+  padding-top: 10px;
+}
+
+.feed-detail-title-section {
+  background-color: #494949;
+}
+
+.feed-detail-title {
+  font-size: 2.5rem;
+  color: white;
+  font-weight: bolder;
+}
+
+.feed-detail-author {
+  color: white;
+  display: block;
+}
+
+.feed-detail-body {
+  font-size: 1.2rem;
+}
+
+.comment-card {
+  border-color: lightgrey;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.comment-send-bottom {
+  padding-inline: 20px;
+}
+
+.comment-text {
+  border: none;
+}
+
+.comment-button {
+  background-color: $base-color;
+  color: white;
+}
+
+.comment-bottom {
+  background-color: $dark-white;
+  font-size: 0.75rem;
+}
+
+.comment-date {
+  color: $light-grey;
+}
+
+.MuiButtonBase-root:disabled {
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+.article-same-user-button {
+  color: lightgrey;
+  font-size: 0.75rem;
+  font-weight: lighter;
+  border-color: lightgrey;
+}

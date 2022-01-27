@@ -1,14 +1,35 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+import { ReactValidatableFormProvider } from "react-validatable-form";
+import { applyMiddleware, createStore } from "redux";
+import { MainRedux } from "./redux/reducer/MainRedux";
+import thunk from "redux-thunk";
+import { Provider } from "react-redux";
+import { logger } from "redux-logger/src";
+
+const cache = createCache({
+  key: "css",
+  prepend: true,
+});
+
+const store = createStore(MainRedux, applyMiddleware(thunk, logger));
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CacheProvider value={cache}>
+      <ReactValidatableFormProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ReactValidatableFormProvider>
+    </CacheProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
