@@ -34,7 +34,11 @@ const initialState = {
 export const FeedSlice = createSlice({
   name: "feed",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    clear: () => {
+      return { ...initialState };
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserFeed.pending, (state, action) => {
       const copyState = { ...state };

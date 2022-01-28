@@ -19,6 +19,7 @@ import { useValidatableForm } from "react-validatable-form";
 import { emailRegex } from "../utils/RegexUtils";
 import { signUpAction } from "../redux/action/SignUpActions";
 import { useStyle } from "../utils/MUIData";
+import { FeedSlice } from "../redux/slice/FeedSlice";
 
 const rules = [
   {
@@ -43,6 +44,7 @@ export function SignUpPage() {
   const state = useSelector((state) => state.signUpRedux);
   const { setUser } = useContext(UserContext);
   const dispatch = useDispatch();
+  const feedActions = FeedSlice.actions;
   const navigator = useNavigate();
   const classes = useStyle();
 
@@ -83,6 +85,7 @@ export function SignUpPage() {
   useEffect(() => {
     if (state.user !== null) {
       setUser(state.user);
+      dispatch(feedActions.clear());
       navigator("/");
     }
   }, [navigator, state]);

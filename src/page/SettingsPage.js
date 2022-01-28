@@ -88,6 +88,7 @@ export function SettingsPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    setUser(null);
     navigate("/");
   };
 

@@ -19,6 +19,7 @@ import { signInAction } from "../redux/action/SignInAction";
 import { useNavigate } from "react-router";
 import { UserContext } from "../App";
 import { useStyle } from "../utils/MUIData";
+import { FeedSlice } from "../redux/slice/FeedSlice";
 
 const rules = [
   {
@@ -47,6 +48,7 @@ export function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const state = useSelector((state) => state.signInRedux);
   const { setUser } = useContext(UserContext);
+  const feedActions = FeedSlice.actions;
   const dispatch = useDispatch();
   const navigator = useNavigate();
   const classes = useStyle();
@@ -93,6 +95,7 @@ export function SignInPage() {
   useEffect(() => {
     if (state.user !== null) {
       setUser(state.user);
+      dispatch(feedActions.clear());
       navigator("/");
     }
   }, [navigator, state]);

@@ -6,7 +6,7 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../styles/Profile.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,6 +17,7 @@ import {
 } from "../redux/action/FeedAction";
 import "../styles/Feed.scss";
 import { ArticleListPagination } from "../view/ArticleListPagination";
+import { UserContext } from "../App";
 
 export function FeedPage() {
   const state = useSelector((state) => state.feedRedux);
@@ -28,34 +29,55 @@ export function FeedPage() {
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState([]);
   const [currentMap, setCurrentMap] = useState(state.feedArticleMap);
+  const { user } = useContext(UserContext);
 
   const handleChangeIndex = (event, newValue) => {
     setPage(0);
     setTabIndex(newValue);
-    if (newValue === 0) {
-      if (!state.feedArticleMap[0]) {
-        dispatch(getUserFeed({ page: 0 }));
+    if (user) {
+      if (newValue === 0) {
+        if (!state.feedArticleMap[0]) {
+          dispatch(getUserFeed({ page: 0 }));
+        }
+        setPages(
+          Array.from({ length: state.totalFeedArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.feedArticleMap);
+      } else if (newValue === 1) {
+        if (!state.globalArticleMap[0]) {
+          dispatch(getGlobalFeed({ page: 0 }));
+        }
+        setPages(
+          Array.from({ length: state.totalGlobalArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.globalArticleMap);
+      } else if (newValue === 2) {
+        if (!state.tagArticleMap[0]) {
+          dispatch(getArticlesWithTag({ tag: selectedTag, page: 0 }));
+        }
+        setPages(
+          Array.from({ length: state.totalTagArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.tagArticleMap);
       }
-      setPages(
-        Array.from({ length: state.totalFeedArticle / 10 + 1 }, (_, i) => i)
-      );
-      setCurrentMap(state.feedArticleMap);
-    } else if (newValue === 1) {
-      if (!state.globalArticleMap[0]) {
-        dispatch(getGlobalFeed({ page: 0 }));
+    } else {
+      if (newValue === 0) {
+        if (!state.globalArticleMap[0]) {
+          dispatch(getGlobalFeed({ page: 0 }));
+        }
+        setPages(
+          Array.from({ length: state.totalGlobalArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.globalArticleMap);
+      } else if (newValue === 1) {
+        if (!state.tagArticleMap[0]) {
+          dispatch(getArticlesWithTag({ tag: selectedTag, page: 0 }));
+        }
+        setPages(
+          Array.from({ length: state.totalTagArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.tagArticleMap);
       }
-      setPages(
-        Array.from({ length: state.totalGlobalArticle / 10 + 1 }, (_, i) => i)
-      );
-      setCurrentMap(state.globalArticleMap);
-    } else if (newValue === 2) {
-      if (!state.tagArticleMap[0]) {
-        dispatch(getArticlesWithTag({ tag: selectedTag, page: 0 }));
-      }
-      setPages(
-        Array.from({ length: state.totalTagArticle / 10 + 1 }, (_, i) => i)
-      );
-      setCurrentMap(state.tagArticleMap);
     }
   };
 
@@ -63,33 +85,53 @@ export function FeedPage() {
     if (!state.tags) {
       dispatch(getTags());
     }
-    if (!state.feedArticles) {
-      dispatch(getUserFeed({ page: page }));
+    if (user) {
+      if (!state.feedArticles) {
+        dispatch(getUserFeed({ page: page }));
+      }
+    } else {
+      if (!state.globalArticles) {
+        dispatch(getGlobalFeed({ page: page }));
+      }
     }
   }, []);
 
   useEffect(() => {
-    if (tabIndex === 0) {
-      setPages(
-        Array.from({ length: state.totalFeedArticle / 10 + 1 }, (_, i) => i)
-      );
-      setCurrentMap(state.feedArticleMap);
-    } else if (tabIndex === 1) {
-      setPages(
-        Array.from({ length: state.totalGlobalArticle / 10 + 1 }, (_, i) => i)
-      );
-      setCurrentMap(state.globalArticleMap);
-    } else if (tabIndex === 2) {
-      setPages(
-        Array.from({ length: state.totalTagArticle / 10 + 1 }, (_, i) => i)
-      );
-      setCurrentMap(state.tagArticleMap);
+    if (user) {
+      if (tabIndex === 0) {
+        setPages(
+          Array.from({ length: state.totalFeedArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.feedArticleMap);
+      } else if (tabIndex === 1) {
+        setPages(
+          Array.from({ length: state.totalGlobalArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.globalArticleMap);
+      } else if (tabIndex === 2) {
+        setPages(
+          Array.from({ length: state.totalTagArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.tagArticleMap);
+      }
+    } else {
+      if (tabIndex === 0) {
+        setPages(
+          Array.from({ length: state.totalGlobalArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.globalArticleMap);
+      } else if (tabIndex === 1) {
+        setPages(
+          Array.from({ length: state.totalTagArticle / 10 + 1 }, (_, i) => i)
+        );
+        setCurrentMap(state.tagArticleMap);
+      }
     }
   }, [state.feedArticleMap, state.globalArticleMap, state.tagArticleMap]);
 
   useEffect(() => {
     if (selectedTag) {
-      setTabIndex(2);
+      setTabIndex(user ? 2 : 1);
       setPage(0);
     }
   }, [selectedTag]);
@@ -101,23 +143,39 @@ export function FeedPage() {
 
   const changePage = (newPage) => {
     setPage(newPage);
-    if (tabIndex === 0) {
-      if (!state.feedArticleMap[newPage]) {
-        dispatch(getUserFeed({ page: newPage }));
-      } else {
-        setCurrentMap(state.feedArticleMap);
+    if (user) {
+      if (tabIndex === 0) {
+        if (!state.feedArticleMap[newPage]) {
+          dispatch(getUserFeed({ page: newPage }));
+        } else {
+          setCurrentMap(state.feedArticleMap);
+        }
+      } else if (tabIndex === 1) {
+        if (!state.globalArticleMap[newPage]) {
+          dispatch(getGlobalFeed({ page: newPage }));
+        } else {
+          setCurrentMap(state.globalArticleMap);
+        }
+      } else if (tabIndex === 2) {
+        if (!state.tagArticleMap[newPage]) {
+          dispatch(getArticlesWithTag({ tag: selectedTag, page: newPage }));
+        } else {
+          setCurrentMap(state.tagArticleMap);
+        }
       }
-    } else if (tabIndex === 1) {
-      if (!state.globalArticleMap[newPage]) {
-        dispatch(getGlobalFeed({ page: newPage }));
-      } else {
-        setCurrentMap(state.globalArticleMap);
-      }
-    } else if (tabIndex === 2) {
-      if (!state.tagArticleMap[newPage]) {
-        dispatch(getArticlesWithTag({ tag: selectedTag, page: newPage }));
-      } else {
-        setCurrentMap(state.tagArticleMap);
+    } else {
+      if (tabIndex === 0) {
+        if (!state.globalArticleMap[newPage]) {
+          dispatch(getGlobalFeed({ page: newPage }));
+        } else {
+          setCurrentMap(state.globalArticleMap);
+        }
+      } else if (tabIndex === 1) {
+        if (!state.tagArticleMap[newPage]) {
+          dispatch(getArticlesWithTag({ tag: selectedTag, page: newPage }));
+        } else {
+          setCurrentMap(state.tagArticleMap);
+        }
       }
     }
   };
@@ -133,10 +191,10 @@ export function FeedPage() {
             className={"profile-tabs"}
             textColor={"inherit"}
           >
-            <Tab label={"Your Feed"} />
-            <Tab label={"Global Feed"} />
+            {user ? <Tab value={0} label={"Your Feed"} /> : <div />}
+            <Tab value={user ? 1 : 0} label={"Global Feed"} />
             {state.selectedTag ? (
-              <Tab label={"#" + state.selectedTag} />
+              <Tab value={user ? 2 : 1} label={"#" + state.selectedTag} />
             ) : (
               <div />
             )}
