@@ -172,7 +172,7 @@ export function SettingsPage() {
             size={"large"}
             onSubmit={handleSubmitForm}
           >
-            Sign in
+            Save Settings
           </Button>
           <Box textAlign={"start"} p={1}>
             <Button

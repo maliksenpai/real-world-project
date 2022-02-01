@@ -17,7 +17,16 @@ const cache = createCache({
   prepend: true,
 });
 
-const store = createStore(MainRedux, applyMiddleware(thunk, logger));
+let store;
+
+console.log(process.env.REACT_APP_EXAMPLE_VALUE);
+
+if(process.env.NODE_ENV !== 'production'){
+  store = createStore(MainRedux, applyMiddleware(thunk, logger));
+}else{
+  store = createStore(MainRedux, applyMiddleware(thunk));
+}
+
 
 ReactDOM.render(
   <React.StrictMode>
